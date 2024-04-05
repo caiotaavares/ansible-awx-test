@@ -8,8 +8,12 @@
       ping:
       register: ping_result
 
-    - name: Display ping results
+    - name: Display successful ping results
       debug:
-        msg: "{{ item.host }} responded with {{ item.ping }}"
-      loop: "{{ ping_result.results }}"
-      when: ping_result.results is defined
+        msg: "{{ item.host }} responded successfully"
+      loop: "{{ ping_result.results | selectattr('ping', 'equalto', 'pong') | list }}"
+
+    - name: Display failed ping results
+      debug:
+        msg: "{{ item.host }} did not respond"
+      loop: "{{ ping_result.results | rejectattr('ping', 'equalto', 'pong') | list }}"
