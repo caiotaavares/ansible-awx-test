@@ -1,6 +1,15 @@
-- name: Hello World Sample
+---
+- name: Ping Test
   hosts: all
+  gather_facts: false
   tasks:
-    - name: Hello Message
+
+    - name: Ping servers
+      ping:
+      register: ping_result
+
+    - name: Display ping results
       debug:
-        msg: "Hello World!"
+        msg: "{{ item.host }} responded with {{ item.ping }}"
+      loop: "{{ ping_result.results }}"
+      when: ping_result.results is defined
