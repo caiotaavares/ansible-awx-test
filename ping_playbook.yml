@@ -12,8 +12,15 @@
       debug:
         msg: "{{ item.host }} responded successfully"
       loop: "{{ ping_result.results | selectattr('ping', 'equalto', 'pong') | list }}"
+      when: ping_result.results | selectattr('ping', 'equalto', 'pong') | list | length > 0
 
     - name: Display failed ping results
       debug:
         msg: "{{ item.host }} did not respond"
       loop: "{{ ping_result.results | rejectattr('ping', 'equalto', 'pong') | list }}"
+      when: ping_result.results | rejectattr('ping', 'equalto', 'pong') | list | length > 0
+
+    - name: Display overall ping result
+      debug:
+        msg: "All hosts responded successfully to ping"
+      when: (ping_result.results | rejectattr('ping', 'equalto', 'pong') | list | length) == 0
