@@ -8,6 +8,12 @@
       ping:
       register: ping_result
 
+    - name: Force ping failure
+      command: /bin/false
+      register: force_failure
+      changed_when: force_failure.rc != 0
+      failed_when: force_failure.rc == 0
+
     - name: Display successful ping results
       debug:
         msg: "{{ item.host }} responded successfully"
@@ -19,8 +25,3 @@
         msg: "{{ item.host }} did not respond"
       loop: "{{ ping_result.results | rejectattr('ping', 'equalto', 'pong') | list }}"
       when: ping_result.results | rejectattr('ping', 'equalto', 'pong') | list | length > 0
-
-    - name: Display overall ping result
-      debug:
-        msg: "All hosts responded successfully to ping"
-      when: (ping_result.results | rejectattr('ping', 'equalto', 'pong') | list | length) == 0
