@@ -6,9 +6,3 @@
         msg: "Host: {{ ansible_hostname }} ({{ ansible_distribution }} {{ ansible_distribution_version }})"
 
     - ping:
-      register: ping_result
-
-- hosts: all
-  tasks:
-    - debug:
-        msg: "Ping result for {{ ansible_hostname }}: {{ ansible_facts.ping_result }}"
