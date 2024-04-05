@@ -1,6 +1,11 @@
 ---
-
 - hosts: all
-  gather_facts: false
+  gather_facts: true
   tasks:
+    - debug:
+        msg: "Host: {{ ansible_hostname }} ({{ ansible_distribution }} {{ ansible_distribution_version }})"
+
     - ping:
+
+    - debug:
+        msg: "Ping result for {{ ansible_hostname }}: {{ ansible_result }}"
